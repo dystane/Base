@@ -4,7 +4,7 @@ import random
 
 # 初始化52张牌
 def initpoke():
-    color = ['Spade', 'Hearts', 'Diamond', 'Club']
+    color = ['♠', '♥', '♣', '♦']
     numbers = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     poke_list = []
     for i in color:
@@ -37,11 +37,13 @@ def flop(poke_list):
     flop_list = []
     for i in range(3):
         flop_list.append(poke_list[i])
+    for j in range(3):
+        poke_list.remove(poke_list[0])
     return flop_list
 
 
 # 转牌和河牌
-def turn_and_river():
+def turn_and_river(poke_list):
     poke_list.remove(poke_list[0])
     turn = poke_list[0]
     return turn
@@ -49,14 +51,28 @@ def turn_and_river():
 
 if __name__ == '__main__':
     poke_list = initpoke()
-    poke_list = shuffle(poke_list)
+    # poke_list = shuffle(poke_list)
     nums = input("发牌，输入玩家人数：")
-    hands = deal(nums, poke_list)
+    hands = deal(int(nums), poke_list)
+    count = 1
     for hand in hands:
-        count = 1
         print("玩家" + str(count) + "手牌")
         hand[0].printpoke()
         hand[1].printpoke()
         count += 1
 
-    pass
+    if_flop = input("是否进入翻牌圈，请输入1翻牌：")
+    flop_list = flop(poke_list)
+    if if_flop == '1':
+        for flop in flop_list:
+            flop.printpoke()
+
+    if_turn = input("是否发进入转牌圈，请输入1转牌：")
+    turn = turn_and_river(poke_list)
+    if if_turn == '1':
+        turn.printpoke()
+
+    if_river = input("是否进入河牌圈，请输入1河牌：")
+    river = turn_and_river(poke_list)
+    if if_river == '1':
+        river.printpoke()
